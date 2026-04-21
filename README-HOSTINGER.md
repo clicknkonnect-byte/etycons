@@ -1,159 +1,103 @@
-# Etycons — Hostinger Node.js Deployment Guide
+# Etycons — Hostinger Deployment Guide
 
-## What's Inside
-
-```
-etycons-production/
-├── dist/                  ← Built application (server + frontend)
-│   ├── index.cjs          ← Compiled Node.js server
-│   └── public/            ← Built React frontend (HTML, CSS, JS, images)
-├── shared/                ← Database schema (needed for migrations)
-├── drizzle.config.ts      ← Drizzle ORM config (for DB setup)
-├── package.json           ← Dependencies & start script
-├── .env.example           ← Environment variable template
-└── README-HOSTINGER.md    ← This file
-```
-
----
-
-## Step 1 — Set Up PostgreSQL Database on Hostinger
-
-1. Log in to **Hostinger hPanel**
-2. Go to **Databases → PostgreSQL**
-3. Create a new database, note:
-   - Database name
-   - Username
-   - Password
-   - Host (usually `localhost` on Hostinger)
-
----
-
-## Step 2 — Create a Node.js App on Hostinger
-
-1. In hPanel, go to **Websites → Node.js**
-2. Click **Create application**
-3. Set:
-   - **Node.js version:** 20.x or 22.x
-   - **Application root:** the folder where you'll upload files (e.g. `/etycons`)
-   - **Application startup file:** `dist/index.cjs`
-4. Note the domain or subdomain assigned to this app
-
----
-
-## Step 3 — Upload Files via File Manager or FTP
-
-Upload the **entire contents** of `etycons-production/` into your application root folder on Hostinger.
-
-Required files/folders:
-- `dist/` (entire folder)
-- `shared/` (entire folder)
-- `drizzle.config.ts`
-- `package.json`
-- `.env` (you'll create this from `.env.example`)
-
----
-
-## Step 4 — Set Environment Variables
-
-You have two options:
-
-### Option A — Create a `.env` file (recommended)
-Copy `.env.example` to `.env` and fill in all values:
+## What's in this ZIP
 
 ```
-DATABASE_URL=postgresql://USER:PASSWORD@localhost:5432/YOUR_DB_NAME
-SESSION_SECRET=some_long_random_secret_string_here
-ADMIN_PASSWORD=YourChosenAdminPassword
-SMTP_USER=your_gmail@gmail.com
-SMTP_PASS=your_gmail_app_password
-OPENAI_API_KEY=sk-your_openai_api_key
+dist/              ← Pre-built app (NO build step needed on Hostinger)
+  index.cjs        ← Compiled server
+  public/          ← Compiled frontend (HTML, CSS, JS, images)
+shared/            ← Database schema (for DB migration only)
+index.js           ← App entry point (Hostinger points to this)
+package.json       ← Dependencies
+drizzle.config.ts  ← DB config (for migration only)
+.env.example       ← Copy this to .env and fill in your values
+```
+
+---
+
+## Step 1 — Upload Files to Hostinger
+
+1. In **hPanel → File Manager**, go to your Node.js app root folder
+2. Upload `etycons-hostinger.zip` and extract it
+3. Make sure `index.js` is at the root level
+
+---
+
+## Step 2 — Hostinger Node.js App Settings
+
+In **hPanel → Websites → Node.js → your app → Settings**:
+
+| Setting                  | Value          |
+|--------------------------|----------------|
+| Node.js version          | 22.x           |
+| Application mode         | Production     |
+| **Entry file**           | **index.js**   |
+| Package manager          | npm            |
+| Build command (if shown) | *(leave blank)*|
+
+---
+
+## Step 3 — Create Your .env File
+
+In File Manager, create a file called `.env` (copy from `.env.example`):
+
+```
+DATABASE_URL=postgresql://USERNAME:PASSWORD@HOST:PORT/DBNAME
+SESSION_SECRET=any-long-random-string-at-least-32-characters
+ADMIN_PASSWORD=YourChosenPassword
+SMTP_USER=your-gmail@gmail.com
+SMTP_PASS=your-16-char-app-password
+OPENAI_API_KEY=sk-your-openai-key
 NODE_ENV=production
-PORT=5000
+PORT=3000
 ```
 
-### Option B — Set via Hostinger hPanel
-In the Node.js app settings, find **Environment Variables** and add each key/value there.
+> **SMTP_PASS** must be a Gmail App Password (not your login password).
+> Get one at: myaccount.google.com → Security → App passwords
+
+OR set these as Environment Variables directly in the Hostinger Node.js panel — either works.
 
 ---
 
-## Step 5 — Install Dependencies
+## Step 4 — Install Dependencies
 
-In the Hostinger **SSH terminal** or through hPanel **Terminal**:
+In Hostinger SSH terminal:
 
 ```bash
-cd /path/to/your/app
 npm install --omit=dev
 ```
 
 ---
 
-## Step 6 — Set Up the Database Tables
-
-Run this once to create all the database tables:
+## Step 5 — Run Database Migration (first time only)
 
 ```bash
 npx drizzle-kit push
 ```
 
-> Make sure your `DATABASE_URL` is set before running this.
+This creates all the required tables in your PostgreSQL database. Run once on first setup.
 
 ---
 
-## Step 7 — Start the Application
+## Step 6 — Start the App
 
-Hostinger will start your app automatically using the startup file `dist/index.cjs`.
-
-Or start manually:
-```bash
-npm start
-```
-
-This runs: `NODE_ENV=production node dist/index.cjs`
-
----
-
-## Step 8 — Point Your Domain
-
-1. In Hostinger hPanel, go to **Domains → DNS Zone**
-2. Point your domain's **A record** to your Hostinger server IP
-3. If using a subdomain, add a **CNAME** or **A record** for it
-4. SSL is usually handled automatically by Hostinger
-
----
-
-## Gmail SMTP (for contact form emails)
-
-The contact form sends emails via Gmail SMTP. To set this up:
-
-1. Go to your Google account → **Security → 2-Step Verification** (enable it)
-2. Then go to **App Passwords** → generate a password for "Mail"
-3. Use that 16-character app password as `SMTP_PASS`
-4. Use your Gmail address as `SMTP_USER`
+Click **Restart** in the Node.js panel. Your site is live!
 
 ---
 
 ## Admin Dashboard
 
-Access your admin dashboard at: `https://yourdomain.com/admin`
+URL: `https://yourdomain.com/admin`
 Password: whatever you set as `ADMIN_PASSWORD`
-
----
-
-## AI Chatbot
-
-The chatbot uses OpenAI's API. Get your API key from:
-https://platform.openai.com/api-keys
-
-Set it as `OPENAI_API_KEY` in your `.env` file.
 
 ---
 
 ## Troubleshooting
 
 | Problem | Solution |
-|---------|----------|
-| App won't start | Check `dist/index.cjs` exists and `NODE_ENV=production` is set |
-| Database errors | Confirm `DATABASE_URL` is correct and run `npx drizzle-kit push` |
-| Emails not sending | Check Gmail app password and that 2FA is enabled |
-| 404 on page refresh | The server handles this — make sure app is running |
-| Chatbot not working | Check `OPENAI_API_KEY` is valid |
+|---|---|
+| App won't start | Check `NODE_ENV=production` and `DATABASE_URL` are set |
+| Database error | Run `npx drizzle-kit push` and check DATABASE_URL format |
+| Emails not sending | SMTP_PASS must be a Gmail App Password, not your login password |
+| Chatbot not working | Check OPENAI_API_KEY is valid — rest of site works without it |
+| Port issues | Try PORT=3000 or PORT=8080 if default doesn't work |
