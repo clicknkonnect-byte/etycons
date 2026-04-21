@@ -1,0 +1,92 @@
+You are a senior web developer + conversion copywriter.
+
+GOAL
+Update my EXISTING website by adding a new page (or updating an existing Services page) for:
+1) Product Sourcing Service
+2) Freight / Shipping & Logistics Service
+Mainly we source from Pakistan and China, and ship/freight to UK, USA, Europe, Australia, UAE, and worldwide.
+
+IMPORTANT
+- This is for my existing website. First, inspect the current project structure and follow the same design system, fonts, spacing, components, and routing style.
+- Do NOT break existing pages. Keep changes minimal and clean.
+- Use responsive layout for mobile + desktop.
+- Use SEO best practices: correct H1, H2, meta title/description, internal links, schema if applicable.
+- Keep language professional and simple English (UK spelling preferred).
+- Add clear CTAs and lead-capture (contact form / quote request).
+- Include trust elements: process steps, FAQs, industries served, service areas, timelines, and “what info we need” checklist.
+
+DELIVERABLES
+A) Create a new page route: /sourcing-freight (or match existing routing pattern) and also add it to the navigation under “Services”.
+B) Add the following sections with good copy:
+   1. Hero section:
+      - Headline: “Sourcing & Freight Solutions from Pakistan and China”
+      - Subheadline: “We source verified suppliers and ship to UK, USA, Europe, Australia, UAE — and anywhere worldwide.”
+      - Primary CTA button: “Request a Quote”
+      - Secondary CTA button: “Book a Call”
+   2. Services overview (cards):
+      - Product Sourcing (Pakistan + China)
+      - Supplier Verification & QC Support
+      - Price Negotiation & Sampling
+      - Consolidation & Warehousing (if relevant)
+      - Freight Options: Air, Sea, Courier/Express
+      - Customs/Documentation Guidance
+      - Door-to-Door Delivery (DDP/DDU explanation)
+   3. “How it works” (step-by-step):
+      Step 1: Share product requirements
+      Step 2: Supplier sourcing + shortlisting
+      Step 3: Sampling + negotiation
+      Step 4: Quality checks (optional)
+      Step 5: Freight booking + documentation
+      Step 6: Delivery + tracking
+   4. Where we ship (regions list + map placeholder):
+      - UK, USA, Europe, Australia, UAE, Worldwide
+      Mention that timelines and cost depend on weight/volume/route/incoterms.
+   5. Why choose us (benefits):
+      - Pakistan + China sourcing network
+      - Faster communication + transparent updates
+      - Cost optimisation (consolidation + best freight mode)
+      - Compliance-focused documentation
+   6. Quote Request Form (lead capture):
+      Fields:
+      - Full Name
+      - Company Name (optional)
+      - Email
+      - WhatsApp/Phone
+      - Sourcing Country (Pakistan/China/Both)
+      - Destination Country (dropdown: UK, USA, EU, Australia, UAE, Other)
+      - Product type/category
+      - Estimated quantity
+      - Estimated weight/volume (optional)
+      - Preferred shipping method (Air/Sea/Express/Not sure)
+      - Notes / Product link
+      Add basic validation, success state, and connect it to existing backend/email handler if present. If no backend exists, implement a simple working solution (e.g., send to an API endpoint already used in the site). If none exists at all, create a lightweight server route to email submissions (using environment variables) OR store submissions to a database already in the project.
+   7. FAQs (8–10 items):
+      Include questions like:
+      - Can you source from Pakistan and China both?
+      - Do you verify suppliers?
+      - Do you handle samples?
+      - What freight method is cheapest/fastest?
+      - What documents are required for shipping?
+      - Can you do door-to-door delivery?
+      - Do you ship to UAE / Europe / Australia?
+      - What affects the cost (weight/volume/incoterms/customs)?
+   8. Final CTA strip:
+      - “Ready to source and ship with confidence?”
+      Buttons: “Request a Quote” and “WhatsApp Us”
+
+C) Add a short “Service disclaimer” footer note:
+   - “We provide logistics coordination and documentation support. Customs duties/taxes depend on destination country rules unless agreed under DDP.”
+
+TECH REQUIREMENTS
+- Use the same tech stack already in my repo (React/Next.js/Vite/Node/etc.). Do not introduce a new framework.
+- Reuse existing components (Button, Container, Section, Card) if present.
+- Add clean, readable code with comments.
+- Ensure accessibility (labels, aria, contrast).
+- Add basic analytics event hooks for CTA clicks if analytics exists.
+
+OUTPUT FORMAT
+1) Brief plan (bullets)
+2) Exact files changed/created with paths
+3) The code changes
+4) Any environment variables needed (if email sending)
+5) How to test locally
